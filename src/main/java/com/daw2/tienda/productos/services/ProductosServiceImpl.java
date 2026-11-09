@@ -13,6 +13,8 @@ import com.daw2.tienda.productos.mappers.ProductoMapper;
 import com.daw2.tienda.productos.repositories.ProductosRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,7 @@ public class ProductosServiceImpl implements ProductosService {
     // ─────────────────────────── LECTURAS ───────────────────────────
 
     @Override
+    @Cacheable
     public List<ProductoResponse> findAll(Optional<String> categoria,
                                           Optional<String> nombre,
                                           Optional<Boolean> conStock) {
@@ -63,6 +66,7 @@ public class ProductosServiceImpl implements ProductosService {
     }
 
     @Override
+    @Cacheable(key = "#id")
     public ProductoResponse findById(Long id) {
         var producto = productosRepository.findById(id)
                 .orElseThrow(() -> new ProductoNotFoundException(id));
@@ -74,6 +78,7 @@ public class ProductosServiceImpl implements ProductosService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public ProductoResponse save(ProductoCreateRequest request) {
 
         // R1 · el SKU no puede repetirse
@@ -92,6 +97,7 @@ public class ProductosServiceImpl implements ProductosService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public ProductoResponse update(Long id, ProductoUpdateRequest request) {
 
         var original = productosRepository.findById(id)
@@ -110,6 +116,7 @@ public class ProductosServiceImpl implements ProductosService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public void deleteById(Long id) {
 
         var producto = productosRepository.findById(id)
@@ -132,6 +139,7 @@ public class ProductosServiceImpl implements ProductosService {
      */
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public ProductoResponse vender(Long id, VentaRequest request) {
 
         var producto = productosRepository.findById(id)

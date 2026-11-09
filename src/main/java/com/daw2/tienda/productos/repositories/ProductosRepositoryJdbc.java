@@ -83,9 +83,9 @@ public class ProductosRepositoryJdbc implements ProductosRepository {
                 .param("precio", p.precio())
                 .param("stock", p.stock())
                 .param("categoriaId", p.categoriaId())
-                .update(keys, "ID");             // ← el nombre de la columna, en MAYUSCULAS
+                .update(keys, "id");             // ← columna en minusculas (PostgreSQL)
 
-        Number id = (Number) keys.getKeys().get("ID");
+        Number id = keys.getKey();
         if (id == null) {
             throw new IllegalStateException("La base de datos no ha devuelto la clave ID");
         }

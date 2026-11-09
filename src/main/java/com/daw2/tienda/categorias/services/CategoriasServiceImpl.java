@@ -8,7 +8,6 @@ import com.daw2.tienda.productos.repositories.ProductosRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class CategoriasServiceImpl implements CategoriasService {
 
